@@ -1,6 +1,9 @@
 """
 Functional tests for the Whisper transcription service.
 Uses the JFK audio sample to verify real transcription works end-to-end.
+
+Marked as 'slow' — skipped in CI by default. Run locally with:
+    pytest tests/test_functional.py -v
 """
 
 from pathlib import Path
@@ -18,6 +21,7 @@ def tiny_model():
     return get_model("tiny")
 
 
+@pytest.mark.slow
 def test_transcribe_english_with_tiny():
     """Transcribe JFK audio with tiny model and verify expected content."""
     assert JFK_FLAC.exists(), f"jfk.flac not found at {JFK_FLAC}"
@@ -33,6 +37,7 @@ def test_transcribe_english_with_tiny():
     assert "your country" in text_lower
 
 
+@pytest.mark.slow
 def test_translate_to_english_with_tiny():
     """Transcribe JFK audio with translate task (English → English, still works)."""
     result = transcribe(JFK_FLAC, "tiny", "en", "translate")
@@ -43,6 +48,7 @@ def test_translate_to_english_with_tiny():
     assert len(result["segments"]) > 0
 
 
+@pytest.mark.slow
 def test_transcribe_auto_detect_language():
     """Transcribe with auto language detection."""
     result = transcribe(JFK_FLAC, "tiny", "auto", "transcribe")
@@ -52,6 +58,7 @@ def test_transcribe_auto_detect_language():
     assert len(result["text"]) > 0
 
 
+@pytest.mark.slow
 def test_transcribe_returns_segments_with_timestamps():
     """Verify segments have proper start/end timestamps."""
     result = transcribe(JFK_FLAC, "tiny", "en", "transcribe")
@@ -67,6 +74,7 @@ def test_transcribe_returns_segments_with_timestamps():
         assert len(seg["text"].strip()) > 0
 
 
+@pytest.mark.slow
 def test_transcribe_returns_duration():
     """Verify total duration is reported."""
     result = transcribe(JFK_FLAC, "tiny", "en", "transcribe")
