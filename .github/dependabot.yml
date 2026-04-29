@@ -1,0 +1,48 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    groups:
+      python-deps:
+        patterns:
+          - "*"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-request-limit: 10
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: github-actions
+    directory: /
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-request-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "CI/CD"
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: UTC
+    open-pull-request-limit: 3
+    commit-message:
+      prefix: "docker"
+    labels:
+      - "docker"

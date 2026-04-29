@@ -1,0 +1,113 @@
+name: Bug Report
+description: Report something that isn't working correctly
+title: "[Bug] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out the form below to help us understand and reproduce the issue.
+
+        **For security vulnerabilities, please see [SECURITY.md](https://github.com/neromorph/local-whisper/blob/main/SECURITY.md) for how to report responsibly — do NOT file a public issue.**
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of local-whisper are you using?
+      options:
+        - latest (Docker image)
+        - main branch
+        - built from source (specify commit)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: installation
+    attributes:
+      label: Installation method
+      description: How did you install/run the app?
+      options:
+        - Docker
+        - Docker Compose
+        - Native Python
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: A clear and concise description of what the bug is.
+      placeholder: |
+        Example: When I try to upload a file larger than 100MB, the server returns a 500 error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Steps to reproduce the behavior:
+        1. Go to '...'
+        2. Click on '...'
+        3. Upload file '...'
+        4. See error
+      value: |
+        1.
+        2.
+        3.
+        4.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happens instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: |
+        Please paste any relevant log output (server logs, browser console, etc).
+        Use ``` to format as code.
+      placeholder: |
+        ```
+        [server logs here]
+        ```
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: |
+        Any other context about the problem, such as:
+        - Operating system
+        - Browser (if applicable)
+        - Whisper model being used
+        - File type/size
+
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Search
+      description: Have you searched for related issues?
+      options:
+        - label: I have searched existing issues and found no duplicates
+          required: true

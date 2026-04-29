@@ -1,0 +1,64 @@
+# Python / build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Git
+.git/
+.gitignore
+.github/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Local runtime data (will be volume-mounted)
+tmp/
+models/
+data/
+
+# Tests
+tests/
+pytest_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+notebooks/
+*.ipynb
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Project docs
+*.md
+!README.md
+!LICENSE
+!CHANGELOG.md
+
+# CI
+.github/workflows/*.retry

@@ -1,0 +1,65 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature] "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new feature? We'd love to hear it!
+
+        Please fill out the form below to describe the feature and its use case.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem solved
+      description: |
+        Describe the problem this feature would solve.
+        Why is this feature needed? What use case does it address?
+      placeholder: |
+        Example: I want to batch transcribe multiple files at once without
+        having to upload them one by one through the web UI.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: |
+        Describe the solution you'd like. Be as specific as possible.
+        How should it work? What should the UX be?
+      placeholder: |
+        Example: Add a new /transcribe/batch endpoint that accepts multiple files
+        and returns a list of job IDs for tracking.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: |
+        Describe any alternative solutions or features you've considered.
+        Why did you choose this approach over others?
+      placeholder: |
+        Example: I considered using a WebSocket-based approach but polling
+        is simpler and works well with existing infrastructure.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: |
+        Any other information, mockups, diagrams, or references that
+        would help understand this feature request.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to help implement this feature
+        - label: I have already started working on this

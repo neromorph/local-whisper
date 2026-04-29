@@ -1,0 +1,24 @@
+# Python dependencies for Whisper Transcription App
+# Install with: pip install -r requirements.txt
+
+# Web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Whisper transcription
+# faster-whisper is preferred (CTranslate2 backend, faster, lower memory)
+# If installation fails, fallback to openai-whisper
+faster-whisper>=1.0.0
+
+# openai-whisper fallback (uncomment if faster-whisper fails)
+# openai-whisper>=20231117
+
+# Utilities
+python-dotenv>=1.0.0
+
+# URL media downloading
+yt-dlp>=2024.4.1
+
+# For audio processing (usually already installed, but good to verify)
+# ffmpeg is required system dependency, not a pip package

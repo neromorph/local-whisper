@@ -1,0 +1,81 @@
+# ---------------------------------------------------------------------------
+# Whisper Transcription App — Docker Compose
+# ---------------------------------------------------------------------------
+# Quick start:
+#   docker compose up --build
+#
+# GPU variant (NVIDIA, optional):
+#   docker compose --profile gpu up --build
+# ---------------------------------------------------------------------------
+
+services:
+  whisper-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whisper-app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=false
+      - HOST=0.0.0.0
+      - PORT=8000
+      - TEMP_DIR=/app/tmp
+      - MODEL_CACHE_DIR=/models
+      - MAX_UPLOAD_MB=2000
+      - MAX_URL_DOWNLOAD_MB=500
+      - URL_TIMEOUT_SECONDS=300
+      - HF_HUB_OFFLINE=1
+      - MAX_TRANSCRIPTION_SECONDS=1800
+      - MAX_CONCURRENT_JOBS=1
+      - ALLOW_ORIGINS=http://localhost:8000
+    volumes:
+      - ./models:/models
+      - ./tmp:/app/tmp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  whisper-app-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whisper-app-gpu
+    profiles:
+      - gpu
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=false
+      - HOST=0.0.0.0
+      - PORT=8000
+      - TEMP_DIR=/app/tmp
+      - MODEL_CACHE_DIR=/models
+      - MAX_UPLOAD_MB=2000
+      - MAX_URL_DOWNLOAD_MB=500
+      - URL_TIMEOUT_SECONDS=300
+      - HF_HUB_OFFLINE=1
+      - MAX_TRANSCRIPTION_SECONDS=1800
+      - MAX_CONCURRENT_JOBS=1
+      - ALLOW_ORIGINS=http://localhost:8000
+    volumes:
+      - ./models:/models
+      - ./tmp:/app/tmp
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

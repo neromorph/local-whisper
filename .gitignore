@@ -1,0 +1,70 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.ropeproject/
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Project-specific
+models/
+tmp/
+data/
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+*.db
+*.sqlite3
+
+# Large media (don't commit audio/video files)
+*.mp3
+*.wav
+*.m4a
+*.mp4
+*.mkv
+*.mov
+*.webm
+*.flac
+*.ogg
+*.aac
+*.wma
+*.aiff
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# CI/CD artifacts
+.github/workflows/*.retry

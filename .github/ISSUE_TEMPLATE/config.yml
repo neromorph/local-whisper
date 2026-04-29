@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/neromorph/local-whisper/security/advisories
+    about: |
+      For security vulnerabilities, please report via GitHub Security Advisories
+      (preferred) or by opening a private vulnerability report.
+      See SECURITY.md for full details.
+      Please do NOT file a public issue for security concerns.
+  - name: Questions & Discussions
+    url: https://github.com/neromorph/local-whisper/discussions
+    about: |
+      Have a question about the project? Want to discuss a feature idea?
+      Post in Discussions — it's a better venue for back-and-forth conversations.
