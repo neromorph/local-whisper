@@ -316,7 +316,7 @@ def download_audio(
                 if progress_callback and elapsed % 2 < poll_interval:
                     progress_callback(-1, "Downloading audio...")
 
-        stdout, stderr = process.communicate(timeout=10)
+        _stdout, stderr = process.communicate(timeout=10)
     except subprocess.TimeoutExpired:
         process.kill()
         raise RuntimeError("Download process did not respond and was killed.") from None
