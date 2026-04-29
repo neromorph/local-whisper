@@ -34,7 +34,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ── Stage 2: Final ─────────────────────────────────────────────────────────
-FROM python:3.14-slim-trixie
+FROM python:3.14-slim-trixie AS final
 
 # OCI labels (Dockerfile best practice)
 LABEL org.opencontainers.image.title="local-whisper"
