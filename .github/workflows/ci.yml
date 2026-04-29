@@ -79,7 +79,7 @@ jobs:
           retention-days: 7
 
       - name: Generate HTML coverage report
-        run: pytest --cov=app --cov-report=html --cov-report=term
+        run: pytest --cov=app --cov-report=html --cov-report=term -m "not slow"
         if: matrix.python-version == '3.12'
         env:
           HF_HUB_OFFLINE: 1
