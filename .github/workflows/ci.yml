@@ -117,7 +117,10 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Run pip-audit
-        run: pip-audit -r requirements.txt
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
+          vulnerability-service: osv
 
       - name: Run Bandit
         run: bandit -r app/ -f json -o bandit-report.json || true
