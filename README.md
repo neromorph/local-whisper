@@ -59,13 +59,29 @@ Whether you're a journalist transcribing interviews, a researcher processing aud
 
 ## Screenshots
 
-> **Screenshots coming soon.** The app features a minimal, dark-theme UI with:
->
-> - A two-tab interface: **Upload File** and **URL Mode**
-> - A drag-and-drop upload zone with file info display
-> - Model, language, and task selectors
-> - Real-time progress bar during transcription
-> - A transcript viewer with Copy, Download .txt, and Download .SRT buttons
+### Main Interface
+
+![Main UI](docs/images/main-ui.png)
+
+### Upload Mode
+
+![Upload Mode](docs/images/upload-mode.png)
+
+### URL Mode
+
+![URL Mode](docs/images/url-mode.png)
+
+### Transcription Progress
+
+![URL Progress](docs/images/url-progress.png)
+
+### Transcript Result
+
+![Transcript Result](docs/images/transcript-result.png)
+
+### Mobile Responsive
+
+![Mobile View](docs/images/mobile-view.png)
 
 ---
 
