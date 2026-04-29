@@ -4,8 +4,11 @@ Handles model loading with caching and transcription.
 Supports both faster-whisper (preferred) and openai-whisper backends.
 """
 
+from __future__ import annotations
+
 import traceback
 from pathlib import Path
+from typing import Any
 
 from app import config
 from app.utils.logger import get_logger
@@ -86,9 +89,11 @@ def get_model(model_name: str):
     return _model_cache[model_name]
 
 
-def _transcribe_faster_whisper(model, file_path: Path, language: str | None, task: str):
+def _transcribe_faster_whisper(
+    model, file_path: Path, language: str | None, task: str
+) -> dict[str, Any]:
     """Transcribe using faster-whisper."""
-    kwargs = {"beam_size": 5}
+    kwargs: dict[str, Any] = {"beam_size": 5}
     if language and language != "auto":
         kwargs["language"] = language
     if task:
@@ -118,17 +123,19 @@ def _transcribe_faster_whisper(model, file_path: Path, language: str | None, tas
     }
 
 
-def _extract_duration(segments: list[dict]) -> float:
+def _extract_duration(segments: list[dict[str, Any]]) -> float:
     """Extract total duration from openai-whisper segments."""
     if not segments:
         return 0.0
-    last_end = segments[-1].get("end", 0.0)
+    last_end: float = segments[-1].get("end", 0.0)
     return round(last_end, 3)
 
 
-def _transcribe_openai(model, file_path: Path, language: str | None, task: str):
+def _transcribe_openai(
+    model, file_path: Path, language: str | None, task: str
+) -> dict[str, Any]:
     """Transcribe using openai-whisper."""
-    kwargs = {"verbose": False}
+    kwargs: dict[str, Any] = {"verbose": False}
     if language and language != "auto":
         kwargs["language"] = language
     if task:
@@ -155,7 +162,9 @@ def _transcribe_openai(model, file_path: Path, language: str | None, task: str):
     }
 
 
-def transcribe(file_path: Path, model_name: str, language: str, task: str) -> dict:
+def transcribe(
+    file_path: Path, model_name: str, language: str, task: str
+) -> dict[str, Any]:
     """Run transcription on an audio/video file."""
     if not config.WHISPER_BACKEND:
         raise RuntimeError(

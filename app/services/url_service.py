@@ -307,7 +307,7 @@ def download_audio(
     try:
         # Wait with timeout and poll for cancellation
         returncode = None
-        elapsed = 0
+        elapsed = 0.0
         poll_interval = 0.5  # seconds
         while returncode is None:
             if cancel_event and cancel_event.is_set():
