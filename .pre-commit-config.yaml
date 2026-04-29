@@ -20,15 +20,3 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
-
-  - repo: https://github.com/pycqa/isort
-    rev: v5.13.2
-    hooks:
-      - id: isort
-        args: [--profile, black, -l, 88, --trailing-comma, --multi-line, 3]
-
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
-    hooks:
-      - id: black
-        language_version: python3.11

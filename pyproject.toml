@@ -55,16 +55,6 @@ Changelog = "https://github.com/neromorph/local-whisper/blob/main/CHANGELOG.md"
 where = ["."]
 include = ["app*"]
 
-[tool.black]
-line-length = 88
-target-version = ["py311", "py312", "py313"]
-
-[tool.isort]
-profile = "black"
-line-length = 88
-multi_line_output = 3
-trailing_comma = true
-
 [tool.ruff]
 line-length = 88
 target-version = "py311"
