@@ -64,6 +64,7 @@ jobs:
       - name: Run tests
         env:
           HF_HUB_OFFLINE: 1
+          PYTHONPATH: ${{ github.workspace }}
         run: pytest -v --tb=short
 
       - name: Upload coverage artifacts
@@ -78,6 +79,7 @@ jobs:
         if: matrix.python-version == '3.12'
         env:
           HF_HUB_OFFLINE: 1
+          PYTHONPATH: ${{ github.workspace }}
 
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
