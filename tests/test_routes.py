@@ -3,11 +3,10 @@ Integration tests for FastAPI routes.
 Uses fastapi.testclient.TestClient — no HTTP server required.
 """
 
-import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app
 from app import config
+from app.main import app
 
 client = TestClient(app)
 
@@ -33,7 +32,9 @@ def test_extensions_returns_allowed_set():
 
 
 def test_transcribe_missing_file():
-    response = client.post("/transcribe", data={"model": "tiny", "language": "en", "task": "transcribe"})
+    response = client.post(
+        "/transcribe", data={"model": "tiny", "language": "en", "task": "transcribe"}
+    )
     assert response.status_code == 422
 
 
@@ -103,13 +104,19 @@ def test_serve_frontend():
 # URL transcription tests
 # ---------------------------------------------------------------------------
 
+
 def test_transcribe_url_success_or_missing_ytdlp():
     # If yt-dlp is installed, we get a job_id immediately (200).
     # If yt-dlp is missing, we get 503.
     # The background pipeline may later fail on metadata, but the endpoint itself is tested here.
     response = client.post(
         "/transcribe/url",
-        json={"url": "https://example.com/video", "model": "base", "language": "auto", "task": "transcribe"},
+        json={
+            "url": "https://example.com/video",
+            "model": "base",
+            "language": "auto",
+            "task": "transcribe",
+        },
     )
     assert response.status_code in (200, 503)
     if response.status_code == 200:
@@ -121,7 +128,12 @@ def test_transcribe_url_success_or_missing_ytdlp():
 def test_transcribe_url_invalid_model():
     response = client.post(
         "/transcribe/url",
-        json={"url": "https://example.com/video", "model": "huge", "language": "auto", "task": "transcribe"},
+        json={
+            "url": "https://example.com/video",
+            "model": "huge",
+            "language": "auto",
+            "task": "transcribe",
+        },
     )
     assert response.status_code == 400
     assert "Invalid model" in response.json()["detail"]
@@ -130,7 +142,12 @@ def test_transcribe_url_invalid_model():
 def test_transcribe_url_invalid_task():
     response = client.post(
         "/transcribe/url",
-        json={"url": "https://example.com/video", "model": "base", "language": "auto", "task": "summarize"},
+        json={
+            "url": "https://example.com/video",
+            "model": "base",
+            "language": "auto",
+            "task": "summarize",
+        },
     )
     assert response.status_code == 400
     assert "Invalid task" in response.json()["detail"]
@@ -139,7 +156,12 @@ def test_transcribe_url_invalid_task():
 def test_transcribe_url_invalid_language():
     response = client.post(
         "/transcribe/url",
-        json={"url": "https://example.com/video", "model": "base", "language": "klingon", "task": "transcribe"},
+        json={
+            "url": "https://example.com/video",
+            "model": "base",
+            "language": "klingon",
+            "task": "transcribe",
+        },
     )
     assert response.status_code == 400
     assert "Invalid language" in response.json()["detail"]
@@ -148,7 +170,12 @@ def test_transcribe_url_invalid_language():
 def test_transcribe_url_invalid_url_scheme():
     response = client.post(
         "/transcribe/url",
-        json={"url": "ftp://example.com/video", "model": "base", "language": "auto", "task": "transcribe"},
+        json={
+            "url": "ftp://example.com/video",
+            "model": "base",
+            "language": "auto",
+            "task": "transcribe",
+        },
     )
     assert response.status_code == 400
     assert "scheme" in response.json()["detail"].lower()
@@ -157,7 +184,12 @@ def test_transcribe_url_invalid_url_scheme():
 def test_transcribe_url_private_ip():
     response = client.post(
         "/transcribe/url",
-        json={"url": "http://192.168.1.1/video", "model": "base", "language": "auto", "task": "transcribe"},
+        json={
+            "url": "http://192.168.1.1/video",
+            "model": "base",
+            "language": "auto",
+            "task": "transcribe",
+        },
     )
     assert response.status_code == 400
     assert "private" in response.json()["detail"].lower()
@@ -166,7 +198,12 @@ def test_transcribe_url_private_ip():
 def test_transcribe_url_localhost():
     response = client.post(
         "/transcribe/url",
-        json={"url": "http://localhost:8000/video", "model": "base", "language": "auto", "task": "transcribe"},
+        json={
+            "url": "http://localhost:8000/video",
+            "model": "base",
+            "language": "auto",
+            "task": "transcribe",
+        },
     )
     assert response.status_code == 400
     assert "private" in response.json()["detail"].lower()

@@ -24,15 +24,15 @@ logger = get_logger(__name__)
 
 # Private/internal IP ranges that should be rejected to mitigate SSRF
 _PRIVATE_IP_NETWORKS = [
-    ipaddress.ip_network("127.0.0.0/8"),   # loopback
-    ipaddress.ip_network("10.0.0.0/8"),     # private
+    ipaddress.ip_network("127.0.0.0/8"),  # loopback
+    ipaddress.ip_network("10.0.0.0/8"),  # private
     ipaddress.ip_network("172.16.0.0/12"),  # private
-    ipaddress.ip_network("192.168.0.0/16"), # private
-    ipaddress.ip_network("169.254.0.0/16"), # link-local
-    ipaddress.ip_network("0.0.0.0/8"),      # current network
-    ipaddress.ip_network("::1/128"),        # IPv6 loopback
-    ipaddress.ip_network("fc00::/7"),       # IPv6 unique local
-    ipaddress.ip_network("fe80::/10"),      # IPv6 link-local
+    ipaddress.ip_network("192.168.0.0/16"),  # private
+    ipaddress.ip_network("169.254.0.0/16"),  # link-local
+    ipaddress.ip_network("0.0.0.0/8"),  # current network
+    ipaddress.ip_network("::1/128"),  # IPv6 loopback
+    ipaddress.ip_network("fc00::/7"),  # IPv6 unique local
+    ipaddress.ip_network("fe80::/10"),  # IPv6 link-local
     ipaddress.ip_network("::ffff:0:0/96"),  # IPv4-mapped IPv6
 ]
 
@@ -126,6 +126,7 @@ def validate_url(url: str) -> None:
 # Metadata extraction
 # ---------------------------------------------------------------------------
 
+
 class MediaMetadata:
     """Simple data holder for media metadata."""
 
@@ -150,7 +151,9 @@ def fetch_metadata(url: str) -> MediaMetadata:
     Raises RuntimeError with human-friendly message on failure.
     """
     if not config.YT_DLP_AVAILABLE:
-        raise RuntimeError("yt-dlp is not installed. Please install it to use URL transcription.")
+        raise RuntimeError(
+            "yt-dlp is not installed. Please install it to use URL transcription."
+        )
 
     cmd = [
         "yt-dlp",
@@ -158,7 +161,8 @@ def fetch_metadata(url: str) -> MediaMetadata:
         "--no-playlist",
         "--dump-json",
         "--no-download",
-        "--socket-timeout", "30",
+        "--socket-timeout",
+        "30",
         url,
     ]
 
@@ -172,9 +176,13 @@ def fetch_metadata(url: str) -> MediaMetadata:
             check=False,
         )
     except subprocess.TimeoutExpired:
-        raise RuntimeError("Fetching media information timed out. The site may be slow or unreachable.") from None
+        raise RuntimeError(
+            "Fetching media information timed out. The site may be slow or unreachable."
+        ) from None
     except FileNotFoundError:
-        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.") from None
+        raise RuntimeError(
+            "yt-dlp executable not found. Please install yt-dlp."
+        ) from None
     except Exception as exc:
         raise RuntimeError(f"Could not fetch media information: {exc}") from exc
 
@@ -184,7 +192,9 @@ def fetch_metadata(url: str) -> MediaMetadata:
         if "Private video" in stderr or "private" in stderr.lower():
             raise RuntimeError("This video is private and cannot be accessed.")
         if "Unsupported URL" in stderr or "unsupported" in stderr.lower():
-            raise RuntimeError("This URL is not supported. Try a YouTube or direct media link.")
+            raise RuntimeError(
+                "This URL is not supported. Try a YouTube or direct media link."
+            )
         if "Sign in" in stderr or "login" in stderr.lower():
             raise RuntimeError("This content requires a login and cannot be accessed.")
         logger.warning(f"yt-dlp metadata error: {stderr}")
@@ -215,6 +225,7 @@ def fetch_metadata(url: str) -> MediaMetadata:
 # Audio download
 # ---------------------------------------------------------------------------
 
+
 def download_audio(
     url: str,
     output_dir: Path,
@@ -239,7 +250,9 @@ def download_audio(
         ValueError: If output_dir is invalid.
     """
     if not config.YT_DLP_AVAILABLE:
-        raise RuntimeError("yt-dlp is not installed. Please install it to use URL transcription.")
+        raise RuntimeError(
+            "yt-dlp is not installed. Please install it to use URL transcription."
+        )
 
     if not output_dir.exists() or not output_dir.is_dir():
         raise ValueError(f"Output directory does not exist: {output_dir}")
@@ -261,11 +274,16 @@ def download_audio(
         "--no-warnings",
         "--no-playlist",
         "-x",
-        "--audio-format", "mp3",
-        "--audio-quality", "0",
-        "--max-filesize", str(config.MAX_URL_DOWNLOAD_BYTES),
-        "--socket-timeout", "30",
-        "-o", output_template,
+        "--audio-format",
+        "mp3",
+        "--audio-quality",
+        "0",
+        "--max-filesize",
+        str(config.MAX_URL_DOWNLOAD_BYTES),
+        "--socket-timeout",
+        "30",
+        "-o",
+        output_template,
         url,
     ]
 
@@ -281,7 +299,9 @@ def download_audio(
             text=True,
         )
     except FileNotFoundError:
-        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.") from None
+        raise RuntimeError(
+            "yt-dlp executable not found. Please install yt-dlp."
+        ) from None
 
     # Simple stderr polling loop to catch cancel + log progress
     try:
@@ -311,7 +331,9 @@ def download_audio(
                     except subprocess.TimeoutExpired:
                         process.kill()
                         process.wait()
-                    raise RuntimeError("Download timed out. The file may be too large or the connection too slow.")
+                    raise RuntimeError(
+                        "Download timed out. The file may be too large or the connection too slow."
+                    )
 
                 if progress_callback and elapsed % 2 < poll_interval:
                     progress_callback(-1, "Downloading audio...")
@@ -335,7 +357,9 @@ def download_audio(
         if "Private video" in stderr_clean:
             raise RuntimeError("This video is private and cannot be accessed.")
         if "Unsupported URL" in stderr_clean or "unsupported" in stderr_clean.lower():
-            raise RuntimeError("This URL is not supported. Try a YouTube or direct media link.")
+            raise RuntimeError(
+                "This URL is not supported. Try a YouTube or direct media link."
+            )
         if "Sign in" in stderr_clean or "login" in stderr_clean.lower():
             raise RuntimeError("This content requires a login and cannot be accessed.")
         logger.error(f"yt-dlp download error: {stderr_clean}")
@@ -344,7 +368,12 @@ def download_audio(
     if not expected_path.exists():
         # Fallback: look for any file starting with the same stem in output_dir
         candidates = list(output_dir.glob(f"{stem}*"))
-        audio_candidates = [c for c in candidates if c.suffix.lower() in (".mp3", ".m4a", ".webm", ".ogg", ".opus", ".wav", ".flac")]
+        audio_candidates = [
+            c
+            for c in candidates
+            if c.suffix.lower()
+            in (".mp3", ".m4a", ".webm", ".ogg", ".opus", ".wav", ".flac")
+        ]
         if audio_candidates:
             expected_path = audio_candidates[0]
         elif candidates:

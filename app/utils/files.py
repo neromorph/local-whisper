@@ -29,7 +29,7 @@ def sanitize_filename(filename: str) -> str:
     filename = filename.lstrip(".")
     if len(filename) > 200:
         name, ext = Path(filename).stem, Path(filename).suffix
-        filename = name[:200 - len(ext)] + ext
+        filename = name[: 200 - len(ext)] + ext
     return filename or "upload"
 
 

@@ -6,11 +6,11 @@ Provides frontend serving, health checks, transcription (upload + URL), and job 
 import asyncio
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from app import config
-from app.services import whisper_service, job_service, url_service
+from app.services import job_service, url_service, whisper_service
 from app.utils.files import cleanup_temp, stream_upload_temp, validate_extension
 from app.utils.logger import get_logger
 
@@ -26,11 +26,21 @@ _transcribe_semaphore = asyncio.Semaphore(config.MAX_CONCURRENT_JOBS)
 # Pydantic models
 # ---------------------------------------------------------------------------
 
+
 class UrlTranscriptionRequest(BaseModel):
-    url: str = Field(..., min_length=1, max_length=2048, description="URL of the video/audio to transcribe")
+    url: str = Field(
+        ...,
+        min_length=1,
+        max_length=2048,
+        description="URL of the video/audio to transcribe",
+    )
     model: str = Field(default=config.DEFAULT_MODEL, description="Whisper model name")
-    language: str = Field(default=config.DEFAULT_LANGUAGE, description="Language code or 'auto'")
-    task: str = Field(default=config.DEFAULT_TASK, description="Task: 'transcribe' or 'translate'")
+    language: str = Field(
+        default=config.DEFAULT_LANGUAGE, description="Language code or 'auto'"
+    )
+    task: str = Field(
+        default=config.DEFAULT_TASK, description="Task: 'transcribe' or 'translate'"
+    )
 
 
 class JobStatusResponse(BaseModel):
@@ -47,6 +57,7 @@ class JobStatusResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Frontend & utilities
 # ---------------------------------------------------------------------------
+
 
 @router.get("/")
 async def serve_frontend():
@@ -94,6 +105,7 @@ async def get_extensions():
 # ---------------------------------------------------------------------------
 # Upload transcription (existing, unchanged)
 # ---------------------------------------------------------------------------
+
 
 @router.post("/transcribe")
 async def transcribe_endpoint(
@@ -163,7 +175,7 @@ async def transcribe_endpoint(
         )
         return {"success": True, **result}
 
-    except asyncio.TimeoutError:
+    except TimeoutError:
         logger.error("Transcription timed out")
         raise HTTPException(
             status_code=504,
@@ -179,6 +191,7 @@ async def transcribe_endpoint(
         detail = str(exc)
         if config.DEBUG:
             import traceback
+
             detail = traceback.format_exc()
         raise HTTPException(status_code=500, detail=detail) from exc
     finally:
@@ -189,6 +202,7 @@ async def transcribe_endpoint(
 # ---------------------------------------------------------------------------
 # URL transcription (new)
 # ---------------------------------------------------------------------------
+
 
 def _validate_transcription_inputs(model: str, language: str, task: str) -> None:
     """Shared validation for model, language, and task parameters."""

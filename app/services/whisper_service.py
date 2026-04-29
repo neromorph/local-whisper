@@ -20,9 +20,11 @@ def _import_backend():
     """Import the available whisper backend modules."""
     if config.WHISPER_BACKEND == "faster-whisper":
         from faster_whisper import WhisperModel
+
         return {"WhisperModel": WhisperModel}
     elif config.WHISPER_BACKEND == "openai-whisper":
         import whisper
+
         return {"whisper": whisper}
     return {}
 
@@ -98,12 +100,14 @@ def _transcribe_faster_whisper(model, file_path: Path, language: str | None, tas
     normalized_segments = []
     full_text_parts = []
     for i, seg in enumerate(segments):
-        normalized_segments.append({
-            "id": i,
-            "start": round(seg.start, 3),
-            "end": round(seg.end, 3),
-            "text": seg.text.strip(),
-        })
+        normalized_segments.append(
+            {
+                "id": i,
+                "start": round(seg.start, 3),
+                "end": round(seg.end, 3),
+                "text": seg.text.strip(),
+            }
+        )
         full_text_parts.append(seg.text.strip())
 
     return {
@@ -134,12 +138,14 @@ def _transcribe_openai(model, file_path: Path, language: str | None, task: str):
 
     normalized_segments = []
     for seg in result.get("segments", []):
-        normalized_segments.append({
-            "id": seg.get("id", 0),
-            "start": round(seg.get("start", 0.0), 3),
-            "end": round(seg.get("end", 0.0), 3),
-            "text": seg.get("text", "").strip(),
-        })
+        normalized_segments.append(
+            {
+                "id": seg.get("id", 0),
+                "start": round(seg.get("start", 0.0), 3),
+                "end": round(seg.get("end", 0.0), 3),
+                "text": seg.get("text", "").strip(),
+            }
+        )
 
     return {
         "text": result.get("text", "").strip(),
@@ -175,4 +181,4 @@ def transcribe(file_path: Path, model_name: str, language: str, task: str) -> di
         logger.error(f"Transcription failed: {exc}")
         if config.DEBUG:
             logger.error(traceback.format_exc())
-        raise  # noqa: B904
+        raise

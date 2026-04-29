@@ -10,7 +10,6 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Optional
 
 from app import config
 from app.services import url_service, whisper_service
@@ -23,9 +22,11 @@ logger = get_logger(__name__)
 # Data model
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Job:
     """Represents a transcription job."""
+
     job_id: str
     url: str
     model: str
@@ -34,9 +35,9 @@ class Job:
     state: str = "queued"  # see STATE_* constants
     progress: int = 0
     message: str = "Waiting to start"
-    result: Optional[dict] = None
-    error: Optional[str] = None
-    metadata: Optional[dict] = None
+    result: dict | None = None
+    error: str | None = None
+    metadata: dict | None = None
     cancel_event: threading.Event = field(default_factory=threading.Event)
     temp_files: list[Path] = field(default_factory=list)
 
@@ -74,6 +75,7 @@ STATE_CANCELLED = "cancelled"
 
 class CancellationError(Exception):
     """Raised when a job is cancelled by the user."""
+
     pass
 
 
@@ -103,7 +105,7 @@ def create_job(url: str, model: str, language: str, task: str) -> Job:
     return job
 
 
-def get_job(job_id: str) -> Optional[Job]:
+def get_job(job_id: str) -> Job | None:
     """Retrieve a job by ID."""
     with _jobs_lock:
         return _jobs.get(job_id)
@@ -151,6 +153,7 @@ def _check_cancelled(job: Job) -> bool:
 # Pipeline execution
 # ---------------------------------------------------------------------------
 
+
 def _run_pipeline(job: Job) -> None:
     """
     Run the full URL transcription pipeline in a background thread.
@@ -165,8 +168,8 @@ def _run_pipeline(job: Job) -> None:
             job.error = "Server is too busy. Please try again later."
         return
 
-    audio_path: Optional[Path] = None
-    transcription_thread: Optional[threading.Thread] = None
+    audio_path: Path | None = None
+    transcription_thread: threading.Thread | None = None
 
     try:
         # 1. Validating URL
@@ -231,8 +234,8 @@ def _run_pipeline(job: Job) -> None:
         _update_job(job, STATE_TRANSCRIBING, 78, "Transcribing audio...")
 
         transcription_done = threading.Event()
-        transcription_result: Optional[dict] = None
-        transcription_error: Optional[Exception] = None
+        transcription_result: dict | None = None
+        transcription_error: Exception | None = None
 
         def transcribe_worker() -> None:
             nonlocal transcription_result, transcription_error
@@ -315,6 +318,7 @@ def _run_pipeline(job: Job) -> None:
 # ---------------------------------------------------------------------------
 # Async entry point
 # ---------------------------------------------------------------------------
+
 
 def _on_pipeline_done(task: asyncio.Task) -> None:
     """Catch unexpected failures of the pipeline task itself."""

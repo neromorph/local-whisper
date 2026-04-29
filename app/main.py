@@ -22,7 +22,9 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
     logger.info("Starting Whisper Transcription App")
-    logger.info(f"Whisper backend: {config.WHISPER_BACKEND or 'NONE (install required)'}")
+    logger.info(
+        f"Whisper backend: {config.WHISPER_BACKEND or 'NONE (install required)'}"
+    )
     logger.info(f"ffmpeg available: {config.FFMPEG_AVAILABLE}")
     logger.info(f"Debug mode: {config.DEBUG}")
     logger.info(f"Temp directory: {config.TEMP_DIR}")
@@ -72,6 +74,7 @@ async def generic_exception_handler(request, exc):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
         "app.main:app",
         host=config.HOST,
