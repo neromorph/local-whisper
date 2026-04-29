@@ -5,6 +5,7 @@ Provides centralized, type-safe config access.
 
 import os
 import shutil
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -205,7 +206,17 @@ def _detect_backend() -> str | None:
 
 WHISPER_BACKEND: str | None = _detect_backend()
 FFMPEG_AVAILABLE: bool = shutil.which("ffmpeg") is not None
-YT_DLP_AVAILABLE: bool = shutil.which("yt-dlp") is not None
+
+
+def _check_executable(name: str) -> bool:
+    """Check if an executable is available, including venv bin directory."""
+    if shutil.which(name) is not None:
+        return True
+    venv_bin = Path(sys.executable).parent
+    return (venv_bin / name).exists()
+
+
+YT_DLP_AVAILABLE: bool = _check_executable("yt-dlp")
 
 # Check temp directory writability once at startup and cache the result
 _temp_writable: bool = False

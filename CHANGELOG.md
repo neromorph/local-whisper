@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.1.1] — 2026-04-29
+
+### Added
+
+- Functional tests using JFK audio sample (`jfk.flac`) for real transcription verification
+- Tests for transcription, translation, auto language detection, segments, and duration
+
+### Fixed
+
+- Health endpoint reporting "degraded" when `yt-dlp` is installed in virtual environment but not on system PATH
+- Executable detection now checks venv `bin/` directory in addition to system PATH
+
 ## [0.1.0] — 2026-04-29
 
 ### Added
