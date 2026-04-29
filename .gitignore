@@ -40,6 +40,7 @@ models/
 tmp/
 data/
 *.log
+AGENTS.md
 .pytest_cache/
 .coverage
 htmlcov/
