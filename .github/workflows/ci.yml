@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      - uses: astral-sh/ruff-action@v4
+      - uses: astral-sh/ruff-action@v4.0.0
 
       - name: Run mypy type check
         run: mypy app/
