@@ -175,4 +175,4 @@ def transcribe(file_path: Path, model_name: str, language: str, task: str) -> di
         logger.error(f"Transcription failed: {exc}")
         if config.DEBUG:
             logger.error(traceback.format_exc())
-        raise
+        raise  # noqa: B904

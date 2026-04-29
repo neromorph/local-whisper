@@ -171,7 +171,7 @@ async def transcribe_endpoint(
                 f"Transcription exceeded the {config.MAX_TRANSCRIPTION_SECONDS}s timeout. "
                 "Try a smaller model or shorter audio file."
             ),
-        )
+        ) from None
     except HTTPException:
         raise
     except Exception as exc:
@@ -180,7 +180,7 @@ async def transcribe_endpoint(
         if config.DEBUG:
             import traceback
             detail = traceback.format_exc()
-        raise HTTPException(status_code=500, detail=detail)
+        raise HTTPException(status_code=500, detail=detail) from exc
     finally:
         if temp_path:
             cleanup_temp(temp_path)
@@ -222,7 +222,7 @@ async def transcribe_url_endpoint(request: UrlTranscriptionRequest):
     try:
         url_service.validate_url(request.url)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+        raise HTTPException(status_code=400, detail=str(exc)) from None
 
     if not config.YT_DLP_AVAILABLE:
         raise HTTPException(

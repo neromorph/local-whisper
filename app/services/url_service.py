@@ -172,11 +172,11 @@ def fetch_metadata(url: str) -> MediaMetadata:
             check=False,
         )
     except subprocess.TimeoutExpired:
-        raise RuntimeError("Fetching media information timed out. The site may be slow or unreachable.")
+        raise RuntimeError("Fetching media information timed out. The site may be slow or unreachable.") from None
     except FileNotFoundError:
-        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.")
+        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.") from None
     except Exception as exc:
-        raise RuntimeError(f"Could not fetch media information: {exc}")
+        raise RuntimeError(f"Could not fetch media information: {exc}") from exc
 
     if result.returncode != 0:
         stderr = result.stderr.strip()
@@ -198,7 +198,7 @@ def fetch_metadata(url: str) -> MediaMetadata:
     try:
         info = json.loads(first_line)
     except json.JSONDecodeError:
-        raise RuntimeError("Could not parse media metadata.")
+        raise RuntimeError("Could not parse media metadata.") from None
 
     metadata = MediaMetadata(
         title=info.get("title") or "",
@@ -281,7 +281,7 @@ def download_audio(
             text=True,
         )
     except FileNotFoundError:
-        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.")
+        raise RuntimeError("yt-dlp executable not found. Please install yt-dlp.") from None
 
     # Simple stderr polling loop to catch cancel + log progress
     try:
@@ -319,12 +319,12 @@ def download_audio(
         stdout, stderr = process.communicate(timeout=10)
     except subprocess.TimeoutExpired:
         process.kill()
-        raise RuntimeError("Download process did not respond and was killed.")
+        raise RuntimeError("Download process did not respond and was killed.") from None
     except RuntimeError:
         raise
     except Exception as exc:
         process.kill()
-        raise RuntimeError(f"Download failed: {exc}")
+        raise RuntimeError(f"Download failed: {exc}") from exc
 
     if returncode != 0:
         stderr_clean = (stderr or "").strip()
